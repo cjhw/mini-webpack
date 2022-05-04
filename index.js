@@ -6,6 +6,11 @@ import traverse from '@babel/traverse'
 import { transformFromAst } from 'babel-core'
 let id = 0
 import webpackConfig from './webpack.config.js'
+import { SyncHook } from 'tapable'
+
+const hooks = {
+  emitFile: new SyncHook(['context']),
+}
 
 function createAsset(filePath) {
   // 1. 获取文件的内容
@@ -77,8 +82,17 @@ function createGraph() {
   }
   return queue
 }
+
+function initPlugins() {
+  const plugins = webpackConfig.plugins
+  plugins.forEach((plugin) => {
+    plugin.apply(hooks)
+  })
+}
+initPlugins()
+
 const graph = createGraph()
-console.log(graph)
+// console.log(graph)
 
 function build(graph) {
   const template = fs.readFileSync('./bundle.ejs', { encoding: 'utf-8' })
@@ -91,10 +105,18 @@ function build(graph) {
       mapping,
     }
   })
-  console.log(data)
+  // console.log(data)
   const code = ejs.render(template, { data })
-  fs.writeFileSync('./dist/bundle.js', code)
-  console.log(code)
+
+  let outputPath = './build/bundle.js'
+  const context = {
+    ChangeOutputPath(path) {
+      outputPath = path
+    },
+  }
+  hooks.emitFile.call(context)
+  fs.writeFileSync(outputPath, code)
+  // console.log(code)
 }
 
 build(graph)

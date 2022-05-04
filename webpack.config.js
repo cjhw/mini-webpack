@@ -1,4 +1,5 @@
 import { jsonLoader } from './jsonLoader.js'
+import { ChangeOutputPath } from './ChangeOutputPath.js'
 
 export default {
   //...
@@ -10,4 +11,5 @@ export default {
       },
     ],
   },
+  plugins: [new ChangeOutputPath()],
 }
