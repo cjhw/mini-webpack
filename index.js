@@ -5,13 +5,35 @@ import parser from '@babel/parser'
 import traverse from '@babel/traverse'
 import { transformFromAst } from 'babel-core'
 let id = 0
+import webpackConfig from './webpack.config.js'
 
 function createAsset(filePath) {
   // 1. 获取文件的内容
   // ast -> 抽象语法树
-  const source = fs.readFileSync(filePath, {
+  let source = fs.readFileSync(filePath, {
     encoding: 'utf-8',
   })
+
+  // initLoader
+  const loaders = webpackConfig.module.rules
+  const loaderContext = {
+    addDeps(dep) {
+      console.log('addDeps', dep)
+    },
+  }
+  loaders.forEach(({ test, use }) => {
+    if (test.test(filePath)) {
+      if (Array.isArray(use)) {
+        use.reverse()
+        use.forEach((fn) => {
+          source = fn.call(loaderContext, source)
+        })
+      } else {
+        source = use(source)
+      }
+    }
+  })
+
   // console.log(source)
   // 2. 获取依赖关系
   const ast = parser.parse(source, {
@@ -64,7 +86,9 @@ function build(graph) {
   const data = graph.map((asset) => {
     const { id, code, mapping } = asset
     return {
-      id, code, mapping
+      id,
+      code,
+      mapping,
     }
   })
   console.log(data)

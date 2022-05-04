@@ -14,50 +14,60 @@
   }
   require(0)
 })({
-  0: [
-    function (require, module, exports) {
-      'use strict'
+  
+    "0": [function (require, module, exports) {
+    "use strict";
 
-      var _foo = require('./foo.js')
+var _foo = require("./foo.js");
 
-      ;(0, _foo.foo)()
-      console.log('main.js')
-    },
-    { './foo.js': 1 },
-  ],
+var _user = require("./user.json");
 
-  1: [
-    function (require, module, exports) {
-      'use strict'
+var _user2 = _interopRequireDefault(_user);
 
-      Object.defineProperty(exports, '__esModule', {
-        value: true,
-      })
-      exports.foo = foo
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-      var _bar = require('./bar.js')
+console.log(_user2.default);
+(0, _foo.foo)();
+console.log('main.js');
+  },{"./foo.js":1,"./user.json":2}],
+  
+    "1": [function (require, module, exports) {
+    "use strict";
 
-      function foo() {
-        console.log('foo.js')
-        ;(0, _bar.bar)()
-      }
-    },
-    { './bar.js': 2 },
-  ],
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.foo = foo;
 
-  2: [
-    function (require, module, exports) {
-      'use strict'
+var _bar = require("./bar.js");
 
-      Object.defineProperty(exports, '__esModule', {
-        value: true,
-      })
-      exports.bar = bar
+function foo() {
+  console.log('foo.js');
+  (0, _bar.bar)();
+}
+  },{"./bar.js":3}],
+  
+    "2": [function (require, module, exports) {
+    "use strict";
 
-      function bar() {
-        console.log('bar')
-      }
-    },
-    {},
-  ],
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = "{\r\n  \"name\": \"caicai\",\r\n  \"age\": 18\r\n}\r\n";
+  },{}],
+  
+    "3": [function (require, module, exports) {
+    "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.bar = bar;
+
+function bar() {
+  console.log('bar');
+}
+  },{}],
+  
+  
 })
