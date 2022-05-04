@@ -19,8 +19,8 @@ class Car {
       ]),
     }
   }
+
   setSpeed(newSpeed) {
-    // 触发事件
     // following call returns undefined even when you returned values
     this.hooks.accelerate.call(newSpeed)
   }
@@ -43,8 +43,6 @@ class Car {
       callback(null, routesList.getRoutes())
     })
   }
-
-  /* ... */
 }
 
 // 1.注册
@@ -54,7 +52,7 @@ car.hooks.accelerate.tap('test 1', (speed) => {
 })
 
 car.hooks.calculateRoutes.tapPromise('test 2 promise', (source, target) => {
-  return new Promise((reslove, reject) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
       console.log('test 2', source, target)
       resolve()
@@ -63,10 +61,10 @@ car.hooks.calculateRoutes.tapPromise('test 2 promise', (source, target) => {
 })
 
 car.hooks.calculateRoutes.tapPromise('test 2 promise', (source, target) => {
-  return new Promise((reslove, reject) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
       console.log('test 3', source, target)
-      resolve('123')
+      resolve()
     }, 0)
   })
 })
